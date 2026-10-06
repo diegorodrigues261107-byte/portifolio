@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contato | Diego Rodrigues Miranda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="index.html"><strong>Diego Rodrigues Miranda</strong><small data-i18n="brand_sub">Estudante de Ciência da Computação · PUC Minas</small></a>
+  <nav aria-label="Principal"><a href="index.html" data-i18n="nav_about">Sobre Mim</a><a href="projetos.html" data-i18n="nav_proj">Projetos</a><a href="experiencias.html" data-i18n="nav_exp">Experiências</a><a href="contato.html" aria-current="page" data-i18n="nav_ct">Contato</a></nav>
+  <div class="lang" role="group" aria-label="Idioma"><button data-lang="pt" aria-pressed="true">PT</button><span>|</span><button data-lang="en" aria-pressed="false">EN</button></div>
+</header>
+<main>
+<h1 data-i18n="ct_title">Contato</h1>
+<p class="lead" data-i18n="ct_lead">Vamos conversar? Escolha um canal ou envie uma mensagem.</p>
+<ul class="links">
+  <li><a href="mailto:seu-email@exemplo.com">E-mail</a></li>
+  <li><a href="https://wa.me/55XXXXXXXXXXX" target="_blank" rel="noopener">WhatsApp</a></li>
+  <li><a href="https://linkedin.com/in/seu-perfil" target="_blank" rel="noopener">LinkedIn</a></li>
+  <li><a href="https://github.com/diegorodrigues261107-byte" target="_blank" rel="noopener">GitHub</a></li>
+</ul>
+<form id="contact-form" novalidate>
+  <label><span data-i18n="f_name">Nome</span><input name="nome" required></label>
+  <label><span data-i18n="f_mail">E-mail</span><input name="email" type="email" required></label>
+  <label><span data-i18n="f_msg">Mensagem</span><textarea name="mensagem" rows="5" required></textarea></label>
+  <button type="submit" data-i18n="f_send">Enviar mensagem</button>
+  <p id="form-status" role="status"></p>
+</form>
+</main>
+<footer class="site-footer"><p>© 2026 Diego Rodrigues Miranda</p></footer>
+<script src="js/script.js"></script>
+</body>
+</html>
