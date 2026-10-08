@@ -15,7 +15,9 @@ const dict = {
     exp_ex_p:"Descrição breve da experiência. Será preenchida na próxima etapa.",
     ct_title:"Contato", ct_lead:"Vamos conversar? Escolha um canal ou envie uma mensagem.",
     f_name:"Nome", f_mail:"E-mail", f_msg:"Mensagem", f_send:"Enviar mensagem",
-    f_err:"Preencha todos os campos com um e-mail válido.", f_soon:"Validação ok. O envio por e-mail será ativado na próxima etapa."
+    f_err_name:"Informe seu nome (mínimo 2 letras).", f_err_mail:"Informe um e-mail válido.", f_err_msg:"Escreva uma mensagem (mínimo 10 caracteres).",
+    f_sending:"Enviando...", f_ok:"Mensagem enviada! Obrigado pelo contato.", f_fail:"Não foi possível enviar. Tente novamente ou use o e-mail acima.", f_cfg:"Envio ainda não configurado (faltam as chaves do EmailJS).",
+    view_repo:"Ver no GitHub", no_img:"Imagem do projeto em breve"
   },
   en: {
     brand_sub:"Computer Science student · PUC Minas",
@@ -33,7 +35,9 @@ const dict = {
     exp_ex_p:"Short description of the experience. To be filled in the next stage.",
     ct_title:"Contact", ct_lead:"Let's talk! Pick a channel or send a message.",
     f_name:"Name", f_mail:"Email", f_msg:"Message", f_send:"Send message",
-    f_err:"Fill in all fields with a valid email.", f_soon:"Validation ok. Email sending will be enabled in the next stage."
+    f_err_name:"Enter your name (at least 2 letters).", f_err_mail:"Enter a valid email.", f_err_msg:"Write a message (at least 10 characters).",
+    f_sending:"Sending...", f_ok:"Message sent! Thanks for reaching out.", f_fail:"Could not send. Try again or use the email above.", f_cfg:"Sending not configured yet (EmailJS keys missing).",
+    view_repo:"View on GitHub", no_img:"Project image coming soon"
   }
 };
 let lang = "pt";
@@ -49,14 +53,71 @@ function setLang(l) {
   document.querySelectorAll(".lang button").forEach(b =>
     b.setAttribute("aria-pressed", b.dataset.lang === l));
   try { localStorage.setItem("lang", l); } catch (e) {}
+  renderTimeline();
+  renderExperiences();
 }
 document.querySelectorAll(".lang button").forEach(b =>
   b.addEventListener("click", () => setLang(b.dataset.lang)));
 setLang(lang);
 
+// ---------- Projetos (timeline dinâmica) ----------
+function esc(s) {
+  const d = document.createElement("div");
+  d.textContent = s;
+  return d.innerHTML;
+}
+function renderTimeline() {
+  const ol = document.getElementById("timeline");
+  if (!ol || typeof projects === "undefined") return;
+  const t = dict[lang];
+  ol.innerHTML = [...projects].sort((a, b) => a.year - b.year).map(p => `
+    <li>
+      <span class="date">${p.year}</span>
+      <h3>${esc(p.name[lang])}</h3>
+      <p>${esc(p.desc[lang])}</p>
+      <p class="tags">${p.tech.map(esc).join(" · ")}</p>
+      ${p.image
+        ? `<img class="shot" src="${esc(p.image)}" alt="${esc(p.name[lang])}" loading="lazy">`
+        : `<div class="shot empty">${t.no_img}</div>`}
+      <a class="btn ghost" href="${esc(p.repo)}" target="_blank" rel="noopener">${t.view_repo}</a>
+    </li>`).join("");
+}
+
+// ---------- Experiências ----------
+function renderExperiences() {
+  const box = document.getElementById("exp-list");
+  if (!box || typeof experiences === "undefined") return;
+  box.innerHTML = experiences.map(e => `
+    <article class="card">
+      <h3>${esc(e.org[lang])}</h3>
+      <p class="date">${esc(e.role[lang])} · ${esc(e.period)}</p>
+      <p>${esc(e.desc[lang])}</p>
+    </article>`).join("");
+}
+
+// ---------- Contato (validação + EmailJS) ----------
+const EMAILJS = { publicKey: "WaYtobjotkSzu5hO0", serviceId: "service_9n7bnbj", templateId: "template_e379nvd" }; 
+
 const form = document.getElementById("contact-form");
-if (form) form.addEventListener("submit", e => {
-  e.preventDefault();
-  const status = document.getElementById("form-status");
-  status.textContent = form.checkValidity() ? dict[lang].f_soon : dict[lang].f_err;
-});
+if (form) {
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = dict[lang];
+    const status = document.getElementById("form-status");
+    const name = form.nome.value.trim();
+    const msg = form.mensagem.value.trim();
+    if (name.length < 2) return (status.textContent = t.f_err_name);
+    if (!form.email.checkValidity() || !form.email.value.trim()) return (status.textContent = t.f_err_mail);
+    if (msg.length < 10) return (status.textContent = t.f_err_msg);
+    if (!EMAILJS.publicKey || typeof emailjs === "undefined") return (status.textContent = t.f_cfg);
+
+    status.textContent = t.f_sending;
+    try {
+      await emailjs.sendForm(EMAILJS.serviceId, EMAILJS.templateId, form, { publicKey: EMAILJS.publicKey });
+      status.textContent = t.f_ok;
+      form.reset();
+    } catch (err) {
+      status.textContent = t.f_fail;
+    }
+  });
+}

@@ -48,3 +48,21 @@ button[type=submit]{font:inherit;font-weight:600;padding:.7rem 1.2rem;border:0;b
 .chips{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem;padding:0;margin:.75rem 0 0}
 .chips li{padding:.35rem .9rem;border:1px solid var(--line);border-radius:999px;background:var(--card);font-weight:600;font-size:.95rem}
 @media (max-width:40rem){.hero{grid-template-columns:1fr}.photo{order:-1;width:180px;height:180px}}
+
+/* Sprint 2 */
+.shot{display:block;width:100%;max-width:32rem;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--line);border-radius:8px;margin:.75rem 0}
+.shot.empty{display:grid;place-items:center;background:var(--card);color:var(--muted);font-size:.9rem}
+.timeline .btn{padding:.4rem .9rem;font-size:.9rem}
+.exp-list{display:grid;gap:1rem;margin-top:1.5rem}
+.exp-list h3{margin:0 0 .2rem}
+.links i{margin-right:.4rem}
+
+/* Cabeçalho com layout estável nos dois idiomas */
+.site-header{display:grid;grid-template-columns:1fr auto;grid-template-areas:"brand lang" "nav nav";gap:.75rem 1rem;align-items:center;position:static}
+.brand{grid-area:brand}
+nav{grid-area:nav;margin-left:0;width:auto}
+.lang{grid-area:lang;position:static}
+@media (min-width:70rem){
+  .site-header{grid-template-columns:auto 1fr auto;grid-template-areas:"brand nav lang";gap:0 2rem}
+  nav{justify-self:end}
+}
