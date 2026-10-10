@@ -66,3 +66,14 @@ nav{grid-area:nav;margin-left:0;width:auto}
   .site-header{grid-template-columns:auto 1fr auto;grid-template-areas:"brand nav lang";gap:0 2rem}
   nav{justify-self:end}
 }
+
+/* Mostra a imagem do projeto inteira, sem cortar */
+.shot{aspect-ratio:auto;height:auto;object-fit:contain}
+.shot.empty{aspect-ratio:16/9}
+
+/* Cabeçalho estável no celular (PT e EN com a mesma altura) */
+@media (max-width:40rem){
+  .brand small{min-height:2.4em}
+  nav{flex-wrap:nowrap;gap:.25rem 1rem;font-size:.9rem;overflow-x:auto}
+  nav a{white-space:nowrap}
+}

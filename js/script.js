@@ -90,7 +90,7 @@ function renderExperiences() {
   box.innerHTML = experiences.map(e => `
     <article class="card">
       <h3>${esc(e.org[lang])}</h3>
-      <p class="date">${esc(e.role[lang])} · ${esc(e.period)}</p>
+      <p class="date">${esc(e.role[lang])} · ${esc(typeof e.period === "object" ? e.period[lang] : e.period)}</p>
       <p>${esc(e.desc[lang])}</p>
     </article>`).join("");
 }
